@@ -51,6 +51,7 @@ after entering the following credentials, you are currently in the localhost.
 
 ## 4. Setup Static IP Address
    It is important to setup a static ip address in order to access the node on the network.
+
    1. To set a static IP address, use the following command to add configurations:
 
             vi /etc/sysconfig/network-scripts/ifcfg-**enp0s8**
@@ -88,3 +89,62 @@ after entering the following credentials, you are currently in the localhost.
 
     5. Static IP will be set after the restart.
 
+
+## 5. Check the availlable memory and storage
+* to check the available memory of the system, use the following command:
+
+            free -m
+
+* to check the available storage, use the following command:
+
+            df
+
+## 5. Maximum number of open file requirements
+* To check the current number of available number of open file descriptors, use the following command:
+
+            ulimit -Sn
+            ulimit -Hn
+
+* To set the value of open file descriptors. (recommended: 10000)
+
+            ulimit -n 10000
+
+## 6. Changing the hostname of the machine
+* By default, the hostname is: `localhost`
+* To check the current running hostname, run the following command:
+
+            hostname -f
+
+* To check the details of hostname, run the command:
+
+            hostnamectl
+
+* To change the hostname of the system:
+
+            hostnamectl set-hostname hostname
+
+* reboot the system using the `reboot` command to make the changes.
+
+
+## 7. Setting the hostname in the hostfile
+* To view the hosts in the hosts file, enter the following command:
+
+            vi /etc/hosts
+
+* add the hosts in a fashion of adding an IP of a node and the hostname, the sample is given below:
+
+            127.0.0.1   localhost localhost.localdomain localhost4 localhost4.localdomain4
+            ::1         localhost localhost.localdomain localhost6 localhost6.localdomain6
+            192.168.XXX.XXX master
+            192.168.YYY.XXX datanode1
+            192.168.XXX.YYY datanode2
+
+* in the above contents of the file, `master`, `datanode1` and `datanode2` are the names of the hosts.
+* make sure to add these settings on each host of the cluster in order for the hosts to work.
+* once these hosts are set, we can SSH any hosts using the hostname instead of the IP Address
+
+            ssh master
+            ssh datanode1
+            ssh datanode2
+
+# 8. Setup Password-sless SSH
