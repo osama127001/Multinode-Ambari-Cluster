@@ -23,13 +23,13 @@ Now open virtual box and click on the **new** button in order to create a new VM
        1. Goto File > Host Network Manager
        2. There are 3 buttons shown namely: **create, remove** and **properties**
        3. Create 2 Adapters and name them **vboxnet0** and **vboxnet1**
-* 9. Now go back to the VirtualBox and select the VM that is just created and click on the **settings** button.
-* 10. Goto **Adapter** tab.
+* Now go back to the VirtualBox and select the VM that is just created and click on the **settings** button.
+* Goto **Adapter** tab.
        1. Under **Adapter2** tab, select the Enable Network Adapter checkbox and assign vboxnet0.
        2. Goto **Adapter3** tab, select the Enable Network Adapter checkbox and assign vboxnet1.
-* 11. Now goto **Storage** tab in settings and Select the **empty** disk. on the right side, add the CentOS7 ISO Image.
-* 12. Click **OK** and you are done.
-* 13. Now run the VM. 
+* Now goto **Storage** tab in settings and Select the **empty** disk. on the right side, add the CentOS7 ISO Image.
+* Click **OK** and you are done.
+* Now run the VM. 
 
 After the creation of the VM is done, you can repeat step 2 in order to create as many nodes as you need for the cluster.
 Note that the more nodes you create, the more resources will be consumed from your system. 
@@ -147,4 +147,122 @@ after entering the following credentials, you are currently in the localhost.
             ssh datanode1
             ssh datanode2
 
-# 8. Setup Password-sless SSH
+## 8. Setup Password-less SSH
+Password-less enables each node in the cluster to ssh any node without authentication or password. follow the steps given below in order to setup passwordless SSH
+* Use the following command to generate a key. 
+
+            ssh-keygen
+
+* Press `enter` for all the default options provided to save the key. The command will generate 2 keys, a public key and a private key.
+
+            Generating public/private rsa key pair.
+            Enter file in which to save the key (/root/.ssh/id_rsa): 
+            Created directory '/root/.ssh'.
+            Enter passphrase (empty for no passphrase): 
+            Enter same passphrase again: 
+            Your identification has been saved in /root/.ssh/id_rsa.
+            Your public key has been saved in /root/.ssh/id_rsa.pub.
+            The key fingerprint is:
+            97:0e:4c:a4:21:97:42:58:86:11:f1:74:e2:5a:82:cb root@localhost.localdomain
+            The key's randomart image is:
+            +--[ RSA 2048]----+
+            |  +OB +..        |
+            | .o=.=.+         |
+            |. . +.. .        |
+            |.. +   o   .     |
+            |.E.     S o      |
+            |         +       |
+            |          .      |
+            |                 |
+            |                 |
+            +-----------------+
+
+* Now enter the following command to copy the generated key to the `authorized_keys` file:
+
+            cat id_rsa.pub >> authorized_keys
+
+* now change the following permissions:
+
+            chmod 700 ~/.ssh
+            chmod 600 ~/authorized_keys
+
+* Now use the following command to copy the key to the target host in order to set the password-less SSH:
+
+            ssh-copy-id -i ~/.ssh/id_rsa.pub root@192.168.XYX.XYX
+
+* Note that in the command above, the target host can also be accessed using the hostname instead of using the IP.
+* Enter the password of the target host. And now you can access 192.168.XYX.XYX from the current host
+* repeat the above process in order to setup the Password-less SSH on other nodes as well.
+
+## 9. Setup NTP on the server and the browser host
+NTP ensures that the clocks of the nodes in the cluster are synchronized. follow the steps given below in order to set the NTP on each node:
+* Install NTP using the command: 
+
+            yum install -y ntp
+
+* Enable NTP using the command; 
+
+            systemctl enable ntpd
+
+* following commands are used to start and restart the NTP service.
+
+            systemctl start ntpd
+            systemctl restart ntpd
+
+* If you want to check the sync status, use the following command:
+
+            ntpstat
+
+## 10. Disabling Firewalls / Configuring IP tables
+
+* execute the following 2 commands given below to disable the firewall
+
+            systemctl disable firewalld
+            service firewalld stop
+
+## 11. Set the Network Config File
+
+* Change the contents of the following file by using the command:
+
+            vi /etc/sysconfig/network
+
+* make the following changes in the file:
+
+            NETWORKING=yes
+            HOSTNAME=localhost
+
+## 12. Disable SELinux and PackageKit and check umask value
+It is important to disable SELinux for the ambari function to setup. 
+* Use the following command to disable SELinux:
+
+            setenforce 0
+
+* to permenantly disable SELinux, make sure to set `SELINUX=disabled` in the following file to make sure that it is not enables after the system is rebooted:
+
+            vi /etc/selinux/config
+
+* For packagekit, set `enabled=0` in the following file:
+
+            vi /etc/yum/pluginconf.d/refresh-packagekit.conf
+
+* To check the current umask, run thhe following command:
+
+            umask
+
+* set the umask just fot the current login session: 
+
+            umask 0022
+
+* permenantly changing the umask for all the users: 
+
+            echo umask 0022 >> /etc/profile
+
+## 13. Configuring MySQL for Ambari
+
+Installing and setting-up MySQL is different as the default database that is provided by ambari is PostgreSQL, so follow the steps bellow to install SQL and Configuring it with Apache Ambari
+
+* We need the package called `wget` to get repositoried and download services from CentOS. Install wget using the commmand:
+
+            yum install wget
+
+
