@@ -365,11 +365,6 @@ For the proper cluster, we need to install ambari server in the master node and 
 
               yum install ambari-agent
 
-* use the following commands to setup JDBC driver: **(if there is any error, check the path from `which java` and change the command:)**
-
-              ambari-server setup --jdbc-db=mysql --jdbc-driver=/usr/share/java/mysql-connector-java.jar
-
-
 * Now login into MySQL using the `ambari` user and the password set for that:
 
               mysql -u ambari -p
@@ -386,7 +381,75 @@ For the proper cluster, we need to install ambari server in the master node and 
 
               ambari-server setup
 
-* 
+* Now make the following choices in the `ambari-server setup`
+
+              Using python  /usr/bin/python
+              Setup ambari-server
+              Checking SELinux...
+              SELinux status is 'disabled'
+              Customize user account for ambari-server daemon [y/n] (n)? 
+              Adjusting ambari-server permissions and ownership...
+              Checking firewall status...
+              Checking JDK...
+              [1] Oracle JDK 1.8 + Java Cryptography Extension (JCE) Policy Files 8
+              [2] Custom JDK
+              ==============================================================================
+              Enter choice (1):  
+              To download the Oracle JDK and the Java Cryptography Extension (JCE) Policy Files you must accept the license terms found at http://www.oracle.com/technetwork/java/javase/terms/license/index.html and not accepting will cancel the Ambari Server setup and you must install the JDK and JCE files manually.
+              Do you accept the Oracle Binary Code License Agreement [y/n] (y)? 
+              Downloading JDK from http://public-repo-1.hortonworks.com/ARTIFACTS/jdk-8u112-linux-x64.tar.gz to /var/lib/ambari-server/resources/jdk-8u112-linux-x64.tar.gz
+              jdk-8u112-linux-x64.tar.gz... 100% (174.7 MB of 174.7 MB)
+              Successfully downloaded JDK distribution to /var/lib/ambari-server/resources/jdk-8u112-linux-x64.tar.gz
+              Installing JDK to /usr/jdk64/
+              Successfully installed JDK to /usr/jdk64/
+              Downloading JCE Policy archive from http://public-repo-1.hortonworks.com/ARTIFACTS/jce_policy-8.zip to /var/lib/ambari-server/resources/jce_policy-8.zip
+
+              Successfully downloaded JCE Policy archive to /var/lib/ambari-server/resources/jce_policy-8.zip
+              Installing JCE policy...
+              Check JDK version for Ambari Server...
+              JDK version found: 8
+              Minimum JDK version is 8 for Ambari. Skipping to setup different JDK for Ambari Server.
+              Checking GPL software agreement...
+              GPL License for LZO: https://www.gnu.org/licenses/old-licenses/gpl-2.0.en.html
+              Enable Ambari Server to download and install GPL Licensed LZO packages [y/n] (n)? y
+              Completing setup...
+              Configuring database...
+              Enter advanced database configuration [y/n] (n)? y
+              Configuring database...
+              ==============================================================================
+              Choose one of the following options:
+              [1] - PostgreSQL (Embedded)
+              [2] - Oracle
+              [3] - MySQL / MariaDB
+              [4] - PostgreSQL
+              [5] - Microsoft SQL Server (Tech Preview)
+              [6] - SQL Anywhere
+              [7] - BDB
+              ==============================================================================
+              Enter choice (1): 3
+              Hostname (localhost): 
+              Port (3306): 
+              Database name (ambari): 
+              Username (ambari): 
+              Enter Database Password (bigdata): //ambari123
+              Re-enter password: //ambari123
+              Configuring ambari database...
+              Should ambari use existing default jdbc /usr/share/java/mysql-connector-java.jar [y/n] (y)? 
+              Configuring remote database connection properties...
+              WARNING: Before starting Ambari Server, you must run the following DDL directly from the database shell to create the schema: /var/lib/ambari-server/resources/Ambari-DDL-MySQL-CREATE.sql
+              Proceed with configuring remote database connection properties [y/n] (y)? 
+              Extracting system views...
+              ambari-admin-2.7.3.0.139.jar
+              ....
+              Ambari repo file contains latest json url http://public-repo-1.hortonworks.com/HDP/hdp_urlinfo.json, updating stacks repoinfos with it...
+              Adjusting ambari-server permissions and ownership...
+              Ambari Server 'setup' completed successfully.
+
+* Finally, ensure that the MySQL driver is available to Ambari and the Hadoop cluster.On the node running Ambari server, issue the 
+following command 
+
+              ambari-server setup --jdbc-db=mysql --jdbc-driver=/usr/share/java/mysql-connector-java.jar
+
 * Now when everything is setup, use the following command on eachnode (including master) to start `ambari-agent`:
 
               ambari-agent start
@@ -398,7 +461,7 @@ For the proper cluster, we need to install ambari server in the master node and 
 * To check the status of `ambari-server` and `ambari-agent`, use the commands:
 
               ambari-server status
-              ambari-agent statuss
+              ambari-agent status
 
 * Once server is `On`, it will show that the server is running on port `8080`, then use the following URL on browser to open `Ambari-UI`
 
