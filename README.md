@@ -317,12 +317,16 @@ Installing and setting-up MySQL is different as the default database that is pro
 
               SET GLOBAL validate_password_policy=LOW;
 
-* Once logged in, you have to create a user for ambari, for that execute the following on MySQL: `(goto the next point if there is an error)`
+* Once logged in, you have to create a user for ambari, for that execute the following on MySQL: 
 
-              CREATE USER 'ambari'@'%' IDENTIFIED BY 'ambari';
+              CREATE USER 'ambari'@'%' IDENTIFIED BY 'ambari123';
               GRANT ALL PRIVILEGES ON *.* TO 'ambari'@'%';
-              CREATE USER 'ambari'@'localhost' IDENTIFIED BY 'ambari';
+              CREATE USER 'ambari'@'localhost' IDENTIFIED BY 'ambari123';
               GRANT ALL PRIVILEGES ON *.* TO 'ambari'@'localhost';
+
+* Now use the `ALTER USER` command again to set the same password for sql ass well:
+
+              ALTER USER 'root'@'localhost' IDENTIFIED BY 'ambari123';
 
 * For installing the JDBC connector, use the following command:
 
@@ -331,10 +335,6 @@ Installing and setting-up MySQL is different as the default database that is pro
 *  To check the path of java, use the command:
 
               which java
-
-* use the following commands to setup JDBC driver: **(if there is any error, check the path from `which java` and change the command:)**
-
-              ambari-server setup --jdbc-db=mysql --jdbc-driver=/usr/share/java/mysql-connector-java.jar
 
 * Now you can login using the `ambari` user: 
 
@@ -365,6 +365,11 @@ For the proper cluster, we need to install ambari server in the master node and 
 
               yum install ambari-agent
 
+* use the following commands to setup JDBC driver: **(if there is any error, check the path from `which java` and change the command:)**
+
+              ambari-server setup --jdbc-db=mysql --jdbc-driver=/usr/share/java/mysql-connector-java.jar
+
+
 * Now login into MySQL using the `ambari` user and the password set for that:
 
               mysql -u ambari -p
@@ -375,7 +380,7 @@ For the proper cluster, we need to install ambari server in the master node and 
               USE ambari;
               SOURCE /var/lib/ambari-server/resources/Ambari-DDL-MySQL-CREATE.sql;
 
-* **NOTE:** Keep in mind that the `username`, `database name` sand the `password` is **`ambari`**.
+* **NOTE:** Keep in mind that the `username`, `database name` is **`ambari`** and the `password` is **`ambari123`**.
 
 * Setup `ambari-setup` using the following command:
 
