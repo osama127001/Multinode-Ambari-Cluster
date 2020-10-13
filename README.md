@@ -56,7 +56,7 @@ after entering the following credentials, you are currently in the localhost.
 
             vi /etc/sysconfig/network-scripts/ifcfg-**enp0s8**
 
-       Note that **enp0s8 is the name of the adapter in my machine**
+Note that **enp0s8 is the name of the adapter in my machine**
 * You will be prompted with the following contents of the file:
 
             TYPE=Ethernet
@@ -179,7 +179,7 @@ Password-less enables each node in the cluster to ssh any node without authentic
 
 * Now enter the following command to copy the generated key to the `authorized_keys` file:
 
-            cat id_rsa.pub >> authorized_keys
+            cat .ssh/id_rsa.pub >> authorized_keys
 
 * now change the following permissions:
 
@@ -267,9 +267,15 @@ Installing and setting-up MySQL is different as the default database that is pro
 
 * Now we need to download MySQL.
 * **Note:** The version of ambari used in this guide is 2.7.3.0 and it does not support MySQL version 8, it has some issues. make sure to install the MySQL version 5 or 6.
-* Download MySQL v57 using the following `wget` link.
+* Download MySQL v57 using the following `wget` link and installation commands.
 
               wget https://dev.mysql.com/get/mysql57-community-release-el7-9.noarch.rpm
+              md5sum mysql57-community-release-el7-9.noarch.rpm
+              sudo rpm -ivh mysql57-community-release-el7-9.noarch.rpm
+
+* Now use the following command to install MySQL:
+
+              yum install mysql-server
 
 * Once MySQL is downloaded, check the status of MySQL before and after starting the service, execute the following commands:
 
@@ -284,6 +290,10 @@ Installing and setting-up MySQL is different as the default database that is pro
 * after the above command, it will ask for the password, if the password was not set earlier, then we get get the password using:
 
               grep 'password' /var/log/mysqld.log
+
+* The first step that you have to perform is to change the password using the `ALTER USER` command, because without changing password you cannot query anything when MySQL is just installed, so execute the following command:
+
+              ALTER USER 'root'@'localhost' IDENTIFIED BY 'Ambari123!';
 
 * Once we are logged in, we have to create a user and set a password that matches the ambari-setup configuration and MySQL, so for that we have to reduce the level of password strength policy, for that we can use the given command to check if the `validate_password_policy` is high or not:
 
@@ -313,10 +323,6 @@ Installing and setting-up MySQL is different as the default database that is pro
               GRANT ALL PRIVILEGES ON *.* TO 'ambari'@'%';
               CREATE USER 'ambari'@'localhost' IDENTIFIED BY 'ambari';
               GRANT ALL PRIVILEGES ON *.* TO 'ambari'@'localhost';
-
-* if you get any error like `you must reset your password using ALTER USER command`, then user the following command before executing the above queries:
-
-              ALTER USER 'root'@'localhost' IDENTIFIED BY 'ambari'
 
 * For installing the JDBC connector, use the following command:
 
@@ -371,6 +377,11 @@ For the proper cluster, we need to install ambari server in the master node and 
 
 * **NOTE:** Keep in mind that the `username`, `database name` sand the `password` is **`ambari`**.
 
+* Setup `ambari-setup` using the following command:
+
+              ambari-server setup
+
+* 
 * Now when everything is setup, use the following command on eachnode (including master) to start `ambari-agent`:
 
               ambari-agent start
@@ -390,3 +401,4 @@ For the proper cluster, we need to install ambari server in the master node and 
 
 * Where `192.168.YY.XXX` is the IP address of the master node.
 * use the default username and password `admin/admin`.
+
