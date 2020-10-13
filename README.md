@@ -318,3 +318,75 @@ Installing and setting-up MySQL is different as the default database that is pro
 
               ALTER USER 'root'@'localhost' IDENTIFIED BY 'ambari'
 
+* For installing the JDBC connector, use the following command:
+
+              yum install mysql-connector-java
+
+*  To check the path of java, use the command:
+
+              which java
+
+* use the following commands to setup JDBC driver: **(if there is any error, check the path from `which java` and change the command:)**
+
+              ambari-server setup --jdbc-db=mysql --jdbc-driver=/usr/share/java/mysql-connector-java.jar
+
+* Now you can login using the `ambari` user: 
+
+              mysql -u ambari -p
+
+* Check the current logged in user using the command:
+
+              SELECT USER();
+
+
+## 14. Installation of Ambari Server and Agents
+
+For the proper cluster, we need to install ambari server in the master node and the ambari agent on all the nodes including the master node:
+
+* Login as root and download the ambari-repo using the following wget link: 
+
+              wget -nv http://public-repo-1.hortonworks.com/ambari/centos7/2.x/updates/2.7.3.0/ambari.repo -O /etc/yum.repos.d/ambari.repo
+
+* you can check the repo-list using the following command: 
+
+              yum repolist
+
+* to install the ambari-server, execute only on the master node
+
+              yum install ambari-server
+
+* to install ambari agent, execute this on all the nodes (including master node)
+
+              yum install ambari-agent
+
+* Now login into MySQL using the `ambari` user and the password set for that:
+
+              mysql -u ambari -p
+
+* Use the following commands to create a database and run the DDL:
+
+              CREATE DATABASE ambari;
+              USE ambari;
+              SOURCE /var/lib/ambari-server/resources/Ambari-DDL-MySQL-CREATE.sql;
+
+* **NOTE:** Keep in mind that the `username`, `database name` sand the `password` is **`ambari`**.
+
+* Now when everything is setup, use the following command on eachnode (including master) to start `ambari-agent`:
+
+              ambari-agent start
+
+* Use the command to start `ambari-server` on master:
+
+              ambari-server start;
+
+* To check the status of `ambari-server` and `ambari-agent`, use the commands:
+
+              ambari-server status
+              ambari-agent statuss
+
+* Once server is `On`, it will show that the server is running on port `8080`, then use the following URL on browser to open `Ambari-UI`
+
+              http://192.168.YY.XXX:8080
+
+* Where `192.168.YY.XXX` is the IP address of the master node.
+* use the default username and password `admin/admin`.
