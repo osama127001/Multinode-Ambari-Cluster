@@ -323,6 +323,7 @@ Installing and setting-up MySQL is different as the default database that is pro
               GRANT ALL PRIVILEGES ON *.* TO 'ambari'@'%';
               CREATE USER 'ambari'@'localhost' IDENTIFIED BY 'ambari123';
               GRANT ALL PRIVILEGES ON *.* TO 'ambari'@'localhost';
+              FLUSH PRIVILEGES
 
 * Now use the `ALTER USER` command again to set the same password for sql ass well:
 
@@ -374,6 +375,22 @@ For the proper cluster, we need to install ambari server in the master node and 
               CREATE DATABASE ambari;
               USE ambari;
               SOURCE /var/lib/ambari-server/resources/Ambari-DDL-MySQL-CREATE.sql;
+
+* Create a Hive user, open MySql from root (`mysql -u root -p`) and execute the following commands:
+
+              CREATE USER 'hiveuser'@'localhost' IDENTIFIED BY 'ambari123';
+              GRANT ALL PRIVILEGES ON *.* TO 'hiveuser'@'localhost';
+              CREATE USER 'hiveuser'@'%' IDENTIFIED BY 'ambari123';
+              GRANT ALL PRIVILEGES ON *.* TO 'hiveuser'@'%' IDENTIFIED BY 'ambari123';
+              FLUSH PRIVILEGES;
+              CREATE DATABASE hive
+
+* Create a Oozie user, open MySql from root (`mysql -u root -p`) and execute the following commands:
+
+              CREATE USER 'oozieuser'@'%' IDENTIFIED BY 'ambari123';
+              GRANT ALL PRIVILEGES ON *.* TO 'oozieuser'@'%';
+              FLUSH PRIVILEGES;
+              CREATE DATABASE oozie;
 
 * **NOTE:** Keep in mind that the `username`, `database name` is **`ambari`** and the `password` is **`ambari123`**.
 
@@ -427,7 +444,7 @@ For the proper cluster, we need to install ambari server in the master node and 
               [7] - BDB
               ==============================================================================
               Enter choice (1): 3
-              Hostname (localhost): 
+              Hostname (localhost): master
               Port (3306): 
               Database name (ambari): 
               Username (ambari): 
