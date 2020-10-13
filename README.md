@@ -265,4 +265,56 @@ Installing and setting-up MySQL is different as the default database that is pro
 
             yum install wget
 
+* Now we need to download MySQL.
+* **Note:** The version of ambari used in this guide is 2.7.3.0 and it does not support MySQL version 8, it has some issues. make sure to install the MySQL version 5 or 6.
+* Download MySQL v57 using the following `wget` link.
+
+              wget https://dev.mysql.com/get/mysql57-community-release-el7-9.noarch.rpm
+
+* Once MySQL is downloaded, check the status of MySQL before and after starting the service, execute the following commands:
+
+              systemctl status mysqld
+              systemctl start mysqld
+              systemctl status mysqld
+
+* Once MySQL service is running, log in with the `root` user with the following command: 
+
+              mysql -u root -p
+
+* after the above command, it will ask for the password, if the password was not set earlier, then we get get the password using:
+
+              grep 'password' /var/log/mysqld.log
+
+* Once we are logged in, we have to create a user and set a password that matches the ambari-setup configuration and MySQL, so for that we have to reduce the level of password strength policy, for that we can use the given command to check if the `validate_password_policy` is high or not:
+
+              SHOW VARIABLES LIKE 'validate_password%';
+
+* Following result is shown once the above query is executed: 
+
+              +--------------------------------------+--------+
+              | Variable_name                        | Value  |
+              +--------------------------------------+--------+
+              | validate_password_check_user_name    | OFF    |
+              | validate_password_dictionary_file    |        |
+              | validate_password_length             | 8      |
+              | validate_password_mixed_case_count   | 1      |
+              | validate_password_number_count       | 1      |
+              | validate_password_policy             | MEDIUM |
+              | validate_password_special_char_count | 1      |
+              +--------------------------------------+--------+
+
+* now execute the following to reduce the `validate_password_policy` level using the following command: 
+
+              SET GLOBAL validate_password_policy=LOW;
+
+* Once logged in, you have to create a user for ambari, for that execute the following on MySQL: `(goto the next point if there is an error)`
+
+              CREATE USER 'ambari'@'%' IDENTIFIED BY 'ambari';
+              GRANT ALL PRIVILEGES ON *.* TO 'ambari'@'%';
+              CREATE USER 'ambari'@'localhost' IDENTIFIED BY 'ambari';
+              GRANT ALL PRIVILEGES ON *.* TO 'ambari'@'localhost';
+
+* if you get any error like `you must reset your password using ALTER USER command`, then user the following command before executing the above queries:
+
+              ALTER USER 'root'@'localhost' IDENTIFIED BY 'ambari'
 
