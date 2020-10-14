@@ -491,19 +491,48 @@ following command
 
 ## 15 Issues
 Following are the issues that I faced during the complete setup of Ambari Multi-Node Server.
-### 1. MySQL Asking to reset password using (ALTER USER) Command
+### * MySQL Asking to reset password using (ALTER USER) Command
 One of the issues that I faced during the cluster setup is that when MySQL is installed for the first time, and I logged in with the root user using the `mysql -u root -p` command, it will not execute any query or command by displaying the error: `Change the password using ALTER USER command`. to fix this issue, I used this [link](https://stackoverflow.com/questions/33467337/reset-mysql-root-password-using-alter-user-statement-after-install-on-mac). so basically all you have to do is to change password using the command: 
 
               ALTER USER 'root'@'localhost' IDENTIFIED BY 'ambari123';
 
 So after using the above command I was able to execute any queries or commands on MySQL.
 
-### 2. MySQL version is not Supported by Ambari
+### * MySQL version is not Supported by Ambari
 Initially the error that I faced was that when I was creating the ambari database and running the given DDL file, the queries would execute but some of them will give an error showing that there is some kind of dependency or a `FOREIGGN_KEY_CONSTRAINT` error. I looked up in the internet and found this [Link](https://community.cloudera.com/t5/Support-Questions/Problem-setup-ambari-2-7-1-0-with-mysql-8-0-13/td-p/234272). It was told that the `MySQL v8` is not supported by `Ambari 2.7.3.0`, so after that I user the `MySQL v5.7` for the setup, and the issue was fixed.
 
-### 3. Ambari Server Setup Credentials Issue
-### 4. Setup of Password-less SSH
-### 5. Changing MySQL Password Policy
+### * Changing MySQL Password Policy
+Changing the MySQL password policy is not important, but for the sake of simplicity I changed it. also the password policy on MySQL was `Medium`, and I changed it to `Low`. I found the following [resourse](https://tecadmin.net/change-mysql-password-policy-level/) to change the password policy. I would recommend to reduce the password policy level to `` low, as I also faced issues with complicated passwords containing capital case letter, number, and a symbol etc.
+
+### * Ambari Server Setup Credentials Issue
+After the Ambari-Server installation, we have to setup ambari using `ambari-server setup` command. after this command, the setup would ask for the following credentials:
+
+       Enter advanced database configuration [y/n] (n)? y
+       Configuring database...
+       ==============================================================================
+       Choose one of the following options:
+       [1] - PostgreSQL (Embedded)
+       [2] - Oracle
+       [3] - MySQL / MariaDB
+       [4] - PostgreSQL
+       [5] - Microsoft SQL Server (Tech Preview)
+       [6] - SQL Anywhere
+       [7] - BDB
+       ==============================================================================
+       Enter choice (1): 3
+       Hostname (localhost): master
+       Port (3306): 
+       Database name (ambari): 
+       Username (ambari): 
+       Enter Database Password (bigdata): //ambari123
+       Re-enter password: //ambari123
+
+here, the issue was that I was not settingg up the password same as the password of MySQL login password, and the username and database name are also same as the one we created after comfiguring MySQL.   
+
+### * Setup of Password-less SSH
+Initially I used the Password-less SSH method provided in the document but found that it was incomplete. the document of `Ambari Server Installation 2.7.3.0` will just show the steps to generate an ssh-key and change permissions, however using the following [link](https://www.itzgeek.com/how-tos/linux/centos-how-tos/ssh-passwordless-login-centos-7-rhel-7.html) the issue was resolved. There was one more, and that was to send the already generated ssh-key to all the target hosts.
+
+
 
 ## 16 References and Links
 Help of the following links were helpful during the deployment of the server:
