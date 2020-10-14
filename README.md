@@ -3,6 +3,8 @@
 This is a complete guide on how to setup a multi-node ambari cluster on CentOS7 using VirtualBox. The cluster is developed to design and 
 implemenet Bigdata Solutions and provide all the services that are required to serve the purpose.
 
+**`Note:`** During the installation, if you are facing any issues, please visit the `Issues` part of the documentation as you might be facing the same issue that I faced. 
+
 ## 1. Downloading Required Stuff:
 * [CentOS7 ISO Image](https://www.centos.org/download/)
 * [VirtualBox](https://www.virtualbox.org/wiki/Downloads)
@@ -484,10 +486,24 @@ following command
 
               http://192.168.YY.XXX:8080
 
-* Where `192.168.YY.XXX` is the IP address of the master node.
+* Where `192.168.YY.XXX` is the static IP address of the master node.
 * use the default username and password `admin/admin`.
 
 ## 15 Issues
+Following are the issues that I faced during the complete setup of Ambari Multi-Node Server.
+# MySQL Asking to reset password using (ALTER USER) Command
+One of the issues that I faced during the cluster setup is that when MySQL is installed for the first time, and I logged in with the root user using the `mysql -u root -p` command, it will not execute any query or command by displaying the error: `Change the password using ALTER USER command`. to fix this issue, I used this [link](https://stackoverflow.com/questions/33467337/reset-mysql-root-password-using-alter-user-statement-after-install-on-mac). so basically all you have to do is to change password using the command: 
+
+              ALTER USER 'root'@'localhost' IDENTIFIED BY 'ambari123';
+
+So after using the above command I was able to execute any queries or commands on MySQL.
+
+# MySQL version is not Supported by Ambari
+
+
+# Ambari Server Setup Credentials Issue
+# Setup of Password-less SSH
+# Changing MySQL Password Policy
 
 ## 16 References and Links
 Help of the following links were helpful during the deployment of the server:
@@ -502,7 +518,7 @@ Help of the following links were helpful during the deployment of the server:
 * [Java Installation on CentOS7](https://phoenixnap.com/kb/install-java-on-centos)
 * [Ambari Agent Installation](https://docs.cloudera.com/HDPDocuments/Ambari-2.5.1.0/bk_ambari-administration/content/install_the_ambari_agents_manually.html)
 * [Creating User in MySQL](https://docs.cloudera.com/HDPDocuments/Ambari-2.7.3.0/administering-ambari/content/amb_using_ambari_with_mysql_or_mariadb.html)
-* [Finnd JDBC Path on CentOS7](https://unix.stackexchange.com/questions/236286/how-to-find-the-path-of-jdbc-driver-in-centos)
+* [Find JDBC Path on CentOS7](https://unix.stackexchange.com/questions/236286/how-to-find-the-path-of-jdbc-driver-in-centos)
 * [Using ALLTER USER command to update password](https://stackoverflow.com/questions/33467337/reset-mysql-root-password-using-alter-user-statement-after-install-on-mac)
 * [Check Current Logged-In user in MySQL](https://stackoverflow.com/questions/28667890/check-current-user-in-mysql-command-line/28667933)
 * [MySQL SOURCE command path error fix](https://stackoverflow.com/questions/14684063/mysql-source-error-2)
