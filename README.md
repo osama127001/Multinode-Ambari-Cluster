@@ -487,3 +487,31 @@ following command
 * Where `192.168.YY.XXX` is the IP address of the master node.
 * use the default username and password `admin/admin`.
 
+## 15 Issues
+
+## 16 References and Links
+Help of the following links were helpful during the deployment of the server:
+
+* [Configuring Static-IP on CentOS7](https://www.techrepublic.com/article/how-to-configure-a-static-ip-address-in-centos-7/)
+* [Concept Tutorial on Basic Multi-node Cluster](https://www.youtube.com/watch?v=RWzJoTWv9M4&feature=youtu.be)
+* [Tutorial on Configuring Static-IP on CentOS7](https://www.youtube.com/watch?v=vI-3isexLrQ)
+* [Clouder Documentation on Ambari Installation](https://docs.cloudera.com/HDPDocuments/Ambari-2.7.3.0/bk_ambari-installation/content/ch_Getting_Ready.html)
+* [Setup Password-less SSH](https://www.itzgeek.com/how-tos/linux/centos-how-tos/ssh-passwordless-login-centos-7-rhel-7.html)
+* [IBM Docs on Configuring MySQL](https://www.ibm.com/support/knowledgecenter/SSPT3X_4.2.5/com.ibm.swg.im.infosphere.biginsights.install.doc/doc/bi_install_ranger_db.html)
+* [Starting the server and agents](https://github.com/vennilasundar/Step-By-Step-Process-for-Cluster-Implementation-/blob/master/Download%20%26%20Install%20Ambari)
+* [Java Installation on CentOS7](https://phoenixnap.com/kb/install-java-on-centos)
+* [Ambari Agent Installation](https://docs.cloudera.com/HDPDocuments/Ambari-2.5.1.0/bk_ambari-administration/content/install_the_ambari_agents_manually.html)
+* [Creating User in MySQL](https://docs.cloudera.com/HDPDocuments/Ambari-2.7.3.0/administering-ambari/content/amb_using_ambari_with_mysql_or_mariadb.html)
+* [Finnd JDBC Path on CentOS7](https://unix.stackexchange.com/questions/236286/how-to-find-the-path-of-jdbc-driver-in-centos)
+* [Using ALLTER USER command to update password](https://stackoverflow.com/questions/33467337/reset-mysql-root-password-using-alter-user-statement-after-install-on-mac)
+* [Check Current Logged-In user in MySQL](https://stackoverflow.com/questions/28667890/check-current-user-in-mysql-command-line/28667933)
+* [MySQL SOURCE command path error fix](https://stackoverflow.com/questions/14684063/mysql-source-error-2)
+* [Check Ambari-server log file](https://community.cloudera.com/t5/Support-Questions/REASON-Ambari-Server-java-process-has-stopped-Please-check/td-p/194615)
+* [Completely Clean and Remove ambari for fresh install](https://community.cloudera.com/t5/Support-Questions/How-to-Completely-Clean-Remove-or-Uninstall-Ambari-for-Fresh/td-p/95114)
+* [Installation of MySQL v5.7](https://www.digitalocean.com/community/tutorials/how-to-install-mysql-on-centos-7)
+* [Issue with the MySQL v8 not supported by Ambari 2.7.3.0](https://community.cloudera.com/t5/Support-Questions/Problem-setup-ambari-2-7-1-0-with-mysql-8-0-13/td-p/234272)
+* [Changing MySQL Password Policy Level](https://tecadmin.net/change-mysql-password-policy-level/)
+* [Installation of JDBC Driver on CentOS7](https://linuxadminonline.com/how-to-install-mysql-jdbc-driver-on-centos-7/)
+
+
+
