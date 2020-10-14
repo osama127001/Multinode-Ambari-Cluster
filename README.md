@@ -491,19 +491,19 @@ following command
 
 ## 15 Issues
 Following are the issues that I faced during the complete setup of Ambari Multi-Node Server.
-# MySQL Asking to reset password using (ALTER USER) Command
+### 1. MySQL Asking to reset password using (ALTER USER) Command
 One of the issues that I faced during the cluster setup is that when MySQL is installed for the first time, and I logged in with the root user using the `mysql -u root -p` command, it will not execute any query or command by displaying the error: `Change the password using ALTER USER command`. to fix this issue, I used this [link](https://stackoverflow.com/questions/33467337/reset-mysql-root-password-using-alter-user-statement-after-install-on-mac). so basically all you have to do is to change password using the command: 
 
               ALTER USER 'root'@'localhost' IDENTIFIED BY 'ambari123';
 
 So after using the above command I was able to execute any queries or commands on MySQL.
 
-# MySQL version is not Supported by Ambari
+### 2. MySQL version is not Supported by Ambari
+Initially the error that I faced was that when I was creating the ambari database and running the given DDL file, the queries would execute but some of them will give an error showing that there is some kind of dependency or a `FOREIGGN_KEY_CONSTRAINT` error. I looked up in the internet and found this [Link](https://community.cloudera.com/t5/Support-Questions/Problem-setup-ambari-2-7-1-0-with-mysql-8-0-13/td-p/234272). It was told that the `MySQL v8` is not supported by `Ambari 2.7.3.0`, so after that I user the `MySQL v5.7` for the setup, and the issue was fixed.
 
-
-# Ambari Server Setup Credentials Issue
-# Setup of Password-less SSH
-# Changing MySQL Password Policy
+### 3. Ambari Server Setup Credentials Issue
+### 4. Setup of Password-less SSH
+### 5. Changing MySQL Password Policy
 
 ## 16 References and Links
 Help of the following links were helpful during the deployment of the server:
