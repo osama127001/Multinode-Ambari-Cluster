@@ -99,7 +99,7 @@ Note that **enp0s8 is the name of the adapter in my machine**
 
 * to check the available storage, use the following command:
 
-       df
+       df -h
 
 ## 5. Maximum number of open file requirements
 * To check the current number of available number of open file descriptors, use the following command:
@@ -557,6 +557,4 @@ Help of the following links were helpful during the deployment of the server:
 * [Issue with the MySQL v8 not supported by Ambari 2.7.3.0](https://community.cloudera.com/t5/Support-Questions/Problem-setup-ambari-2-7-1-0-with-mysql-8-0-13/td-p/234272)
 * [Changing MySQL Password Policy Level](https://tecadmin.net/change-mysql-password-policy-level/)
 * [Installation of JDBC Driver on CentOS7](https://linuxadminonline.com/how-to-install-mysql-jdbc-driver-on-centos-7/)
-
-
 
